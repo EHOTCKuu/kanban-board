@@ -1,75 +1,51 @@
-# React + TypeScript + Vite
+# 🐾 Котиковая Канбан-доска
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Интерактивная Канбан-доска (аналог Trello) с милым котиковым дизайном. Проект создан для демонстрации навыков работы с современным стеком Frontend-разработки.
 
-Currently, two official plugins are available:
+## 🖥 Главный экран
+![Главная доска](./docs/main-board.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🎨 Создание задачи
+![Модалка создания задачи](./docs/task-modal.png)
 
-## React Compiler
+## 🚀 Стек технологий
+*   **Сборка:** Vite
+*   **Фреймворк:** React 18 (TypeScript)
+*   **Стейт-менеджер:** Redux Toolkit (RTK)
+*   **Стилизация:** SCSS Modules
+*   **Хранение данных:** localStorage
+*   **Деплой:** GitHub Actions + GitHub Pages
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Функционал
+*   **Управление задачами:** Создание, редактирование (название + окрас котика) и удаление.
+*   **Drag-and-Drop:** 
+    *   Перетаскивание карточек между колонками.
+    *   Сортировка карточек внутри колонки (смена приоритета).
+    *   Визуальная подсветка зоны сброса.
+*   **Управление колонками:** Добавление, переименование (двойной клик) и удаление.
+*   **UX/UI:**
+    *   Адаптивная верстка.
+    *   Empty States (заглушки для пустых колонок).
+    *   Кастомный паттерн на фоне и иконка сайта.
+*   **Сохранение:** Все данные автоматически сохраняются в `localStorage`.
 
-## Expanding the ESLint configuration
+## 🧠 Архитектурные решения
+В проекте применены паттерны, характерные для production-разработки:
+1.  **Оптимизация рендера:** Компоненты `TaskCard` и `Column` обернуты в `React.memo`, а селекторы задач мемоизированы через `createSelector` (Reselect). Это предотвращает перерисовку всей доски при перетаскивании одной карточки.
+2.  **Кастомные хуки:** Сложная логика Drag-and-Drop (события `onDragStart`, `onDragOver`, `onDrop`, управление прозрачностью и подсветкой) вынесена в хук `useDragAndDrop`, что сделало компоненты чистыми и переиспользуемыми.
+3.  **Строгая типизация:** Все данные (задачи, колонки, окрасы) строго типизированы через TypeScript интерфейсы.
+4.  **Работа с Edge Cases:** Защита от ввода слишком длинных строк, подтверждение удаления, корректная обработка события `onDragLeave` (с проверкой `relatedTarget`), чтобы избежать залипания подсветки.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠 Установка и запуск
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. Клонируйте репозиторий:
+   git clone https://github.com/EHOTCKuu/kanban-board.git
+2. Перейдите в папку проекта:
+   cd kanban-board
+3. Установите зависимости:
+   npm install
+4. Запустите сервер для разработки:
+   npm run dev
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+## 🌐 Демо
+Посмотреть работающую версию можно по ссылке: [https://EHOTCKuu.github.io/kanban-board/](https://EHOTCKuu.github.io/kanban-board/)
