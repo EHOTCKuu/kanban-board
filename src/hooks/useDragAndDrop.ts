@@ -1,8 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-export function useDraggable(taskId: string, onDragStart: (id: string) => void, onDragEnd: () => void) {
+// --- Хук для перетаскиваемой карточки (Drag Source) ---
+export function useDraggable(
+  taskId: string, 
+  onDragStart: (id: string) => void, 
+  onDragEnd: () => void
+) {
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.setData('text/plain', taskId);
+    // Задержка, чтобы браузер успел сделать "снимок" карточки
     setTimeout(() => {
       (e.target as HTMLElement).style.opacity = '0.4';
     }, 0);
@@ -17,19 +23,18 @@ export function useDraggable(taskId: string, onDragStart: (id: string) => void, 
   return { handleDragStart, handleDragEnd };
 }
 
+// --- Хук для зоны сброса (Drop Zone) ---
 interface UseDroppableProps {
   onDropTask: (taskId: string, index?: number) => void;
   isDraggingGlobal: string | null;
 }
 
 export function useDroppable({ onDropTask, isDraggingGlobal }: UseDroppableProps) {
-  const [isDragOver, setIsDragOver] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
-  useEffect(() => {
-    if (isDraggingGlobal === null) {
-      setIsDragOver(false);
-    }
-  }, [isDraggingGlobal]);
+  // Вычисляем актуальное состояние "наведения" на лету.
+  // Если глобально ничего не тащат, то и наведение всегда false.
+  const isDragOver = isHovered && isDraggingGlobal !== null;
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -37,7 +42,7 @@ export function useDroppable({ onDropTask, isDraggingGlobal }: UseDroppableProps
 
   const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault();
-    setIsDragOver(true);
+    setIsHovered(true);
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
@@ -45,14 +50,14 @@ export function useDroppable({ onDropTask, isDraggingGlobal }: UseDroppableProps
     const currentElement = e.currentTarget as HTMLElement;
     const relatedElement = e.relatedTarget as HTMLElement | null;
     if (!relatedElement || !currentElement.contains(relatedElement)) {
-      setIsDragOver(false);
+      setIsHovered(false);
     }
   };
 
   const handleDrop = (e: React.DragEvent, index?: number) => {
     e.preventDefault();
-    e.stopPropagation();
-    setIsDragOver(false);
+    e.stopPropagation(); 
+    setIsHovered(false);
     
     const taskId = e.dataTransfer.getData('text/plain');
     if (taskId) {
