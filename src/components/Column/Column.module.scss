@@ -1,0 +1,132 @@
+@use '../../styles/variables' as *;
+
+.column {
+  display: flex;
+  flex-direction: column;
+  background: $bg-panel; 
+  border: 1px solid $border-soft;
+  border-radius: $radius-lg;
+  padding: $gap-md;
+  min-height: 200px;
+  min-width: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.columnDragOver {
+  border-color: $accent;
+  background-color: rgba($accent, 0.03);
+  box-shadow: 0 0 0 2px rgba($accent, 0.2);
+  
+  .emptyState {
+    border-color: $accent;
+    color: $accent;
+  }
+}
+
+.columnHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $gap-md;
+  padding-bottom: $gap-sm;
+  border-bottom: 1px solid $border-soft;
+}
+
+.titleWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.columnTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: $text-main;
+  cursor: pointer;
+  user-select: none;
+}
+
+.titleInput {
+  font-size: 15px;
+  font-weight: 700;
+  color: $text-main;
+  background: transparent;
+  border: 1px solid $accent;
+  border-radius: 4px;
+  padding: 2px 4px;
+  outline: none;
+  width: 140px;
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba($accent, 0.2);
+  }
+}
+
+.columnCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: $radius-pill;
+  background: $accent;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.addBtn,
+.deleteColBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: $text-muted;
+  transition: all 0.15s;
+}
+
+.addBtn:hover {
+  background: $bg-main;
+  color: $accent;
+}
+
+.deleteColBtn:hover {
+  background: rgba($accent-hover, 0.1);
+  color: $accent-hover;
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: $gap-sm;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $gap-lg $gap-md;
+  border: 2px dashed $border-soft;
+  border-radius: $radius-md;
+  color: $text-muted;
+  font-size: 14px;
+  text-align: center;
+  gap: 4px;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.emptyHint {
+  font-size: 12px;
+  opacity: 0.7;
+}

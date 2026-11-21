@@ -1,0 +1,14 @@
+@use '../../styles/variables' as *;
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: $gap-md;
+  padding: 0 $gap-lg $gap-lg;
+  align-items: start;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    padding: 0 $gap-md $gap-md;
+  }
+}

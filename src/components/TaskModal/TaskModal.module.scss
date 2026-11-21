@@ -1,0 +1,139 @@
+@use '../../styles/variables' as *;
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: $gap-md;
+  backdrop-filter: blur(2px);
+}
+
+.modal {
+  background: $bg-panel;
+  border-radius: $radius-lg;
+  padding: $gap-lg;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 700;
+  color: $text-main;
+  margin-bottom: $gap-md;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $gap-md;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: $text-muted;
+}
+
+.input {
+  padding: 10px 12px;
+  border-radius: $radius-sm;
+  border: 1px solid $border-soft;
+  font-size: 14px;
+  color: $text-main;
+  background: $bg-main;
+  
+  &:focus {
+    outline: none;
+    border-color: $accent;
+  }
+}
+
+.coatGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.coatBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: $radius-md;
+  border: 2px solid transparent;
+  transition: all 0.15s;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.03);
+  }
+}
+
+.coatBtnActive {
+  border-color: $accent;
+  background: rgba($accent, 0.05);
+}
+
+.colorPreview {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: $gap-sm;
+}
+
+.rightActions {
+  display: flex;
+  gap: $gap-sm;
+}
+
+.cancelBtn {
+  padding: 8px 16px;
+  border-radius: $radius-pill;
+  color: $text-muted;
+  font-weight: 600;
+  transition: background 0.15s;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+}
+
+.saveBtn {
+  padding: 8px 16px;
+  border-radius: $radius-pill;
+  background: $accent;
+  color: #fff;
+  font-weight: 600;
+  transition: background 0.15s;
+
+  &:hover {
+    background: $accent-hover;
+  }
+}
+
+.deleteBtn {
+  padding: 8px 16px;
+  border-radius: $radius-pill;
+  color: $accent-hover;
+  font-weight: 600;
+  transition: background 0.15s;
+
+  &:hover {
+    background: rgba($accent-hover, 0.1);
+  }
+}
