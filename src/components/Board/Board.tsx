@@ -20,7 +20,7 @@ export function Board() {
 
   return (
     <>
-      <main className={styles.board}>
+      <main className={styles.board} id="main-board">
         {columnOrder.map((colId) => (
           <Column
             key={colId}

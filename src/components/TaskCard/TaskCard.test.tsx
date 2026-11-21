@@ -7,7 +7,6 @@ import boardReducer from '../../features/board/boardSlice';
 import { TaskCard } from './TaskCard';
 import type { Task } from '../../features/board/types';
 
-// Создаем минимальный фейковый стор для теста
 const createTestStore = () =>
   configureStore({
     reducer: { board: boardReducer },

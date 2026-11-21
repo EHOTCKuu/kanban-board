@@ -121,6 +121,7 @@ function ColumnBase({
             className={styles.addBtn}
             onClick={() => onAddTaskClick(columnId)}
             title="Добавить задачу"
+            aria-label={`Добавить задачу в колонку ${column.title}`}
           >
             <PlusIcon />
           </button>
@@ -128,6 +129,7 @@ function ColumnBase({
             className={styles.deleteColBtn}
             onClick={handleDeleteColumn}
             title="Удалить колонку"
+            aria-label={`Удалить колонку ${column.title}`}
           >
             <CrossIcon />
           </button>

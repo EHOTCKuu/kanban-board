@@ -6,12 +6,15 @@ import { COAT_KEYS, COATS } from '../../features/board/coats';
 import { taskSchema, type TaskFormValues } from '../../features/board/schemas';
 import type { CatCoat } from '../../features/board/types';
 import styles from './TaskModal.module.scss';
+import { useEffect } from 'react';
 
 interface TaskModalProps {
   columnId: string;
   taskId?: string;
   onClose: () => void;
 }
+
+
 
 export function TaskModal({ columnId, taskId, onClose }: TaskModalProps) {
   const dispatch = useAppDispatch();
@@ -50,10 +53,18 @@ export function TaskModal({ columnId, taskId, onClose }: TaskModalProps) {
     }
   };
 
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [onClose]);
+
   return (
     <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <h2 className={styles.title}>
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <h2 className={styles.title} id="modal-title">
           {isEditing ? 'Редактировать задачу' : 'Новая задача'}
         </h2>
         
@@ -65,15 +76,17 @@ export function TaskModal({ columnId, taskId, onClose }: TaskModalProps) {
               className={styles.input}
               placeholder="Например: Погладить кота..."
               autoFocus
-              {...register('title')} // Подключаем инпут к RHF
+              {...register('title')}
+              aria-invalid={errors.title ? 'true' : 'false'}
+              aria-describedby={errors.title ? 'title-error' : undefined}
             />
-            {/* Выводим ошибку, если Zod ее нашел */}
-            {errors.title && <span className={styles.errorText}>{errors.title.message}</span>}
+
+            {errors.title && <span className={styles.errorText} id="title-error" role="alert">{errors.title.message}</span>}
           </label>
 
           <div className={styles.label}>
             Окрас котика:
-            {/* Controller нужен для кастомных инпутов (наши кнопки) */}
+
             <Controller
               control={control}
               name="coat"

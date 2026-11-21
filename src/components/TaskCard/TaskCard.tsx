@@ -49,6 +49,13 @@ function TaskCardBase({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault(); // Чтобы страница не скроллилась при нажатии Space
+      onClick(task.id);
+    }
+  };
+
   return (
     <div
       className={styles.taskCard}
@@ -57,6 +64,10 @@ function TaskCardBase({
       onDragEnd={handleDragEnd}
       {...droppableProps}
       onClick={() => onClick(task.id)}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      role="button"
+      aria-label={`Задача: ${task.title}. Нажмите Enter, чтобы редактировать.`}
     >
       <div
         className={styles.coatMarker}
@@ -67,6 +78,7 @@ function TaskCardBase({
         className={styles.deleteBtn}
         onClick={handleDelete}
         title="Удалить"
+        aria-label={`Удалить задачу ${task.title}`}
       >
         <CrossIcon />
       </button>

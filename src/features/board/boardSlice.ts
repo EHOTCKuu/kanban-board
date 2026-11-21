@@ -141,6 +141,10 @@ const boardSlice = createSlice({
       delete state.columns[columnId];
       state.columnOrder = state.columnOrder.filter((id) => id !== columnId);
     },
+
+    replaceBoard(state, action: PayloadAction<BoardState>) {
+      return action.payload;
+    },
   },
 });
 
@@ -153,6 +157,7 @@ export const {
   renameColumn,
   addColumn,
   deleteColumn,
+  replaceBoard,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;
