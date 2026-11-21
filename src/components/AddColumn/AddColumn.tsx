@@ -19,10 +19,7 @@ export function AddColumn() {
 
   if (!isAdding) {
     return (
-      <button 
-        className={styles.addColumnBtn} 
-        onClick={() => setIsAdding(true)}
-      >
+      <button className={styles.addColumnBtn} onClick={() => setIsAdding(true)}>
         + Добавить колонку
       </button>
     );
@@ -46,9 +43,9 @@ export function AddColumn() {
           <button type="submit" className={styles.submitBtn}>
             Добавить
           </button>
-          <button 
-            type="button" 
-            className={styles.cancelBtn} 
+          <button
+            type="button"
+            className={styles.cancelBtn}
             onClick={() => setIsAdding(false)}
           >
             Отмена

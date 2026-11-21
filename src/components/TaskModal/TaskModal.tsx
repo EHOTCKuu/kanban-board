@@ -1,35 +1,44 @@
-import { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addTask, updateTask, deleteTask } from '../../features/board/boardSlice';
 import { COAT_KEYS, COATS } from '../../features/board/coats';
+import { taskSchema, type TaskFormValues } from '../../features/board/schemas';
 import type { CatCoat } from '../../features/board/types';
 import styles from './TaskModal.module.scss';
 
 interface TaskModalProps {
   columnId: string;
-  taskId?: string; // Если передан, значит мы редактируем
+  taskId?: string;
   onClose: () => void;
 }
 
 export function TaskModal({ columnId, taskId, onClose }: TaskModalProps) {
   const dispatch = useAppDispatch();
-  
-  // Если taskId есть, берем данные из стора. Если нет — пустые поля.
   const existingTask = useAppSelector((s) => (taskId ? s.board.tasks[taskId] : null));
   
-  const [title, setTitle] = useState(existingTask?.title || '');
-  const [coat, setCoat] = useState<CatCoat>(existingTask?.coat || COAT_KEYS[0]);
-
   const isEditing = Boolean(taskId);
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    if (!title.trim()) return;
+  // Инициализируем форму
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<TaskFormValues>({
+    resolver: zodResolver(taskSchema),
+    defaultValues: {
+      title: existingTask?.title || '',
+      coat: existingTask?.coat || COAT_KEYS[0],
+    },
+  });
 
+  // Обработчик отправки (вызывается только если валидация Zod прошла успешно)
+  const onSubmit = (data: TaskFormValues) => {
     if (isEditing && taskId) {
-      dispatch(updateTask({ id: taskId, title: title.trim(), coat }));
+      dispatch(updateTask({ id: taskId, title: data.title, coat: data.coat as CatCoat }));
     } else {
-      dispatch(addTask(columnId, title.trim(), coat));
+      dispatch(addTask(columnId, data.title, data.coat as CatCoat));
     }
     onClose();
   };
@@ -48,39 +57,45 @@ export function TaskModal({ columnId, taskId, onClose }: TaskModalProps) {
           {isEditing ? 'Редактировать задачу' : 'Новая задача'}
         </h2>
         
-        <form onSubmit={handleSubmit} className={styles.form}>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <label className={styles.label}>
             Что нужно сделать?
             <input
               type="text"
               className={styles.input}
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
               placeholder="Например: Погладить кота..."
-              maxLength={100}
               autoFocus
-              required
+              {...register('title')} // Подключаем инпут к RHF
             />
+            {/* Выводим ошибку, если Zod ее нашел */}
+            {errors.title && <span className={styles.errorText}>{errors.title.message}</span>}
           </label>
 
           <div className={styles.label}>
             Окрас котика:
-            <div className={styles.coatGrid}>
-              {COAT_KEYS.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  className={`${styles.coatBtn} ${coat === c ? styles.coatBtnActive : ''}`}
-                  onClick={() => setCoat(c)}
-                  title={c}
-                >
-                  <div 
-                    className={styles.colorPreview} 
-                    style={{ backgroundColor: COATS[c].bg, borderColor: COATS[c].spot }} 
-                  />
-                </button>
-              ))}
-            </div>
+            {/* Controller нужен для кастомных инпутов (наши кнопки) */}
+            <Controller
+              control={control}
+              name="coat"
+              render={({ field }) => (
+                <div className={styles.coatGrid}>
+                  {COAT_KEYS.map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      className={`${styles.coatBtn} ${field.value === c ? styles.coatBtnActive : ''}`}
+                      onClick={() => field.onChange(c)}
+                      title={c}
+                    >
+                      <div 
+                        className={styles.colorPreview} 
+                        style={{ backgroundColor: COATS[c].bg, borderColor: COATS[c].spot }} 
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+            />
           </div>
 
           <div className={styles.actions}>

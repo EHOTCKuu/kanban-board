@@ -8,9 +8,10 @@ import { TaskCard } from './TaskCard';
 import type { Task } from '../../features/board/types';
 
 // Создаем минимальный фейковый стор для теста
-const createTestStore = () => configureStore({
-  reducer: { board: boardReducer },
-});
+const createTestStore = () =>
+  configureStore({
+    reducer: { board: boardReducer },
+  });
 
 const mockTask: Task = {
   id: 't1',
@@ -21,20 +22,20 @@ const mockTask: Task = {
 describe('TaskCard component', () => {
   it('должен рендерить название задачи', () => {
     const store = createTestStore();
-    
+
     render(
       <Provider store={store}>
-        <TaskCard 
-          task={mockTask} 
-          index={0} 
-          columnId="col-1" 
+        <TaskCard
+          task={mockTask}
+          index={0}
+          columnId="col-1"
           draggingTaskId={null}
-          onDragStart={vi.fn()} 
-          onDragEnd={vi.fn()} 
-          onClick={vi.fn()} 
-          onDropTask={vi.fn()} 
+          onDragStart={vi.fn()}
+          onDragEnd={vi.fn()}
+          onClick={vi.fn()}
+          onDropTask={vi.fn()}
         />
-      </Provider>
+      </Provider>,
     );
 
     // Ищем текст "Покормить кота" на экране
@@ -44,20 +45,20 @@ describe('TaskCard component', () => {
   it('должен вызывать onClick при клике на карточку', async () => {
     const store = createTestStore();
     const handleClick = vi.fn(); // Создаем мок-функцию
-    
+
     render(
       <Provider store={store}>
-        <TaskCard 
-          task={mockTask} 
-          index={0} 
-          columnId="col-1" 
+        <TaskCard
+          task={mockTask}
+          index={0}
+          columnId="col-1"
           draggingTaskId={null}
-          onDragStart={vi.fn()} 
-          onDragEnd={vi.fn()} 
+          onDragStart={vi.fn()}
+          onDragEnd={vi.fn()}
           onClick={handleClick} // Передаем мок
-          onDropTask={vi.fn()} 
+          onDropTask={vi.fn()}
         />
-      </Provider>
+      </Provider>,
     );
 
     // Симулируем клик пользователя по карточке

@@ -3,6 +3,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 import reactCompiler from 'eslint-plugin-react-compiler';
+import eslintConfigPrettier from 'eslint-config-prettier';
 
 export default [
   { ignores: ['dist'] },
@@ -27,6 +28,7 @@ export default [
         { allowConstantExport: true },
       ],
       'react-compiler/react-compiler': 'error',
+      ...eslintConfigPrettier.rules,
     },
   },
 ];

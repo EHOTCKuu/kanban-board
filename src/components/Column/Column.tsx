@@ -1,7 +1,11 @@
 import { useState, memo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectTasksForColumn } from '../../features/board/selectors';
-import { moveTask, renameColumn, deleteColumn } from '../../features/board/boardSlice';
+import {
+  moveTask,
+  renameColumn,
+  deleteColumn,
+} from '../../features/board/boardSlice';
 import { useDroppable } from '../../hooks/useDragAndDrop';
 import { TaskCard } from '../TaskCard/TaskCard';
 import { PlusIcon } from '../icons/PlusIcon';
@@ -16,8 +20,12 @@ interface ColumnProps {
   onTaskClick: (columnId: string, taskId: string) => void;
 }
 
-function ColumnBase({ 
-  columnId, onDragStartTask, onDragEndTask, onAddTaskClick, onTaskClick 
+function ColumnBase({
+  columnId,
+  onDragStartTask,
+  onDragEndTask,
+  onAddTaskClick,
+  onTaskClick,
 }: ColumnProps) {
   const dispatch = useAppDispatch();
   const column = useAppSelector((s) => s.board.columns[columnId]);
@@ -32,14 +40,20 @@ function ColumnBase({
     isDraggingGlobal: draggingTaskId,
     onDropTask: (taskId) => {
       // Если бросили в пустое место, кидаем в конец
-      dispatch(moveTask({ taskId, toColumnId: columnId, toIndex: tasks.length }));
+      dispatch(
+        moveTask({ taskId, toColumnId: columnId, toIndex: tasks.length }),
+      );
       onDragEndTask();
-    }
+    },
   });
 
   if (!column) return null;
 
-  const handleDropTask = (taskId: string, targetColumnId: string, toIndex: number) => {
+  const handleDropTask = (
+    taskId: string,
+    targetColumnId: string,
+    toIndex: number,
+  ) => {
     dispatch(moveTask({ taskId, toColumnId: targetColumnId, toIndex }));
     onDragEndTask();
   };
@@ -53,7 +67,7 @@ function ColumnBase({
     if (titleValue.trim() && titleValue.trim() !== column.title) {
       dispatch(renameColumn({ id: columnId, title: titleValue.trim() }));
     } else {
-      setTitleValue(column.title); 
+      setTitleValue(column.title);
     }
     setIsEditingTitle(false);
   };
@@ -73,7 +87,7 @@ function ColumnBase({
   };
 
   return (
-    <section 
+    <section
       className={`${styles.column} ${isDragOver ? styles.columnDragOver : ''}`}
       {...droppableProps}
     >
@@ -91,8 +105,8 @@ function ColumnBase({
               autoFocus
             />
           ) : (
-            <h2 
-              className={styles.columnTitle} 
+            <h2
+              className={styles.columnTitle}
               onDoubleClick={startEditing}
               title="Двойной клик для переименования"
             >
@@ -101,17 +115,17 @@ function ColumnBase({
           )}
           <span className={styles.columnCount}>{tasks.length}</span>
         </div>
-        
+
         <div className={styles.headerActions}>
-          <button 
-            className={styles.addBtn} 
+          <button
+            className={styles.addBtn}
             onClick={() => onAddTaskClick(columnId)}
             title="Добавить задачу"
           >
             <PlusIcon />
           </button>
-          <button 
-            className={styles.deleteColBtn} 
+          <button
+            className={styles.deleteColBtn}
             onClick={handleDeleteColumn}
             title="Удалить колонку"
           >
@@ -123,7 +137,9 @@ function ColumnBase({
       {tasks.length === 0 ? (
         <div className={styles.emptyState}>
           <span>Здесь пока пусто</span>
-          <span className={styles.emptyHint}>Перетащите задачу сюда или нажмите «+»</span>
+          <span className={styles.emptyHint}>
+            Перетащите задачу сюда или нажмите «+»
+          </span>
         </div>
       ) : (
         <div className={styles.taskList}>

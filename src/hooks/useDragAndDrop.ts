@@ -2,9 +2,9 @@ import { useState } from 'react';
 
 // --- Хук для перетаскиваемой карточки (Drag Source) ---
 export function useDraggable(
-  taskId: string, 
-  onDragStart: (id: string) => void, 
-  onDragEnd: () => void
+  taskId: string,
+  onDragStart: (id: string) => void,
+  onDragEnd: () => void,
 ) {
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.setData('text/plain', taskId);
@@ -29,7 +29,10 @@ interface UseDroppableProps {
   isDraggingGlobal: string | null;
 }
 
-export function useDroppable({ onDropTask, isDraggingGlobal }: UseDroppableProps) {
+export function useDroppable({
+  onDropTask,
+  isDraggingGlobal,
+}: UseDroppableProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   // Вычисляем актуальное состояние "наведения" на лету.
@@ -56,9 +59,9 @@ export function useDroppable({ onDropTask, isDraggingGlobal }: UseDroppableProps
 
   const handleDrop = (e: React.DragEvent, index?: number) => {
     e.preventDefault();
-    e.stopPropagation(); 
+    e.stopPropagation();
     setIsHovered(false);
-    
+
     const taskId = e.dataTransfer.getData('text/plain');
     if (taskId) {
       onDropTask(taskId, index);
@@ -72,6 +75,6 @@ export function useDroppable({ onDropTask, isDraggingGlobal }: UseDroppableProps
       onDragEnter: handleDragEnter,
       onDragLeave: handleDragLeave,
       onDrop: (e: React.DragEvent) => handleDrop(e),
-    }
+    },
   };
 }

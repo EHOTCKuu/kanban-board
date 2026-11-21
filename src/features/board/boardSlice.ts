@@ -5,9 +5,13 @@ import { STORAGE_KEY } from './constants';
 
 const initialState: BoardState = {
   columns: {
-    'col-todo':        { id: 'col-todo',        title: 'Мур-очередь', taskIds: ['t1', 't2'] },
-    'col-in-progress': { id: 'col-in-progress', title: 'В работе',    taskIds: ['t3'] },
-    'col-done':        { id: 'col-done',        title: 'Мурлычет',    taskIds: ['t4'] },
+    'col-todo': { id: 'col-todo', title: 'Мур-очередь', taskIds: ['t1', 't2'] },
+    'col-in-progress': {
+      id: 'col-in-progress',
+      title: 'В работе',
+      taskIds: ['t3'],
+    },
+    'col-done': { id: 'col-done', title: 'Мурлычет', taskIds: ['t4'] },
   },
   tasks: {
     t1: { id: 't1', title: 'Сверстать карточку', coat: 'ginger' },
@@ -49,7 +53,10 @@ const boardSlice = createSlice({
       },
     },
 
-    updateTask(state, action: PayloadAction<{ id: string; title: string; coat: CatCoat }>) {
+    updateTask(
+      state,
+      action: PayloadAction<{ id: string; title: string; coat: CatCoat }>,
+    ) {
       const task = state.tasks[action.payload.id];
       if (!task) return;
       task.title = action.payload.title;
@@ -67,7 +74,11 @@ const boardSlice = createSlice({
 
     moveTask(
       state,
-      action: PayloadAction<{ taskId: string; toColumnId: string; toIndex: number }>,
+      action: PayloadAction<{
+        taskId: string;
+        toColumnId: string;
+        toIndex: number;
+      }>,
     ) {
       const { taskId, toColumnId, toIndex } = action.payload;
       const targetColumn = state.columns[toColumnId];
@@ -75,7 +86,7 @@ const boardSlice = createSlice({
 
       let sourceColumnId = '';
       let currentIndex = -1;
-      
+
       for (const [colId, col] of Object.entries(state.columns)) {
         const idx = col.taskIds.indexOf(taskId);
         if (idx !== -1) {
@@ -126,7 +137,7 @@ const boardSlice = createSlice({
       for (const taskId of column.taskIds) {
         delete state.tasks[taskId];
       }
-      
+
       delete state.columns[columnId];
       state.columnOrder = state.columnOrder.filter((id) => id !== columnId);
     },

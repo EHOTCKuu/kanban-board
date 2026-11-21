@@ -18,21 +18,32 @@ interface TaskCardProps {
   draggingTaskId: string | null;
 }
 
-function TaskCardBase({ 
-  task, onDragStart, onDragEnd, onClick, index, columnId, onDropTask, draggingTaskId
+function TaskCardBase({
+  task,
+  onDragStart,
+  onDragEnd,
+  onClick,
+  index,
+  columnId,
+  onDropTask,
+  draggingTaskId,
 }: TaskCardProps) {
   const dispatch = useAppDispatch();
   const coat = COATS[task.coat];
 
-  const { handleDragStart, handleDragEnd } = useDraggable(task.id, onDragStart, onDragEnd);
-  
+  const { handleDragStart, handleDragEnd } = useDraggable(
+    task.id,
+    onDragStart,
+    onDragEnd,
+  );
+
   const { droppableProps } = useDroppable({
     isDraggingGlobal: draggingTaskId,
-    onDropTask: (taskId) => onDropTask(taskId, columnId, index)
+    onDropTask: (taskId) => onDropTask(taskId, columnId, index),
   });
 
   const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     if (window.confirm('Удалить задачу?')) {
       dispatch(deleteTask(task.id));
     }
@@ -47,12 +58,16 @@ function TaskCardBase({
       {...droppableProps}
       onClick={() => onClick(task.id)}
     >
-      <div 
-        className={styles.coatMarker} 
+      <div
+        className={styles.coatMarker}
         style={{ backgroundColor: coat.bg, borderColor: coat.spot }}
       />
       <span className={styles.taskTitle}>{task.title}</span>
-      <button className={styles.deleteBtn} onClick={handleDelete} title="Удалить">
+      <button
+        className={styles.deleteBtn}
+        onClick={handleDelete}
+        title="Удалить"
+      >
         <CrossIcon />
       </button>
     </div>
